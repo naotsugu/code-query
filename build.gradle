@@ -1,0 +1,43 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies { classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M2' }
+}
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+repositories {
+    jcenter()
+}
+
+
+dependencies {
+
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    providedCompile 'org.eclipse.persistence:javax.persistence:2.1.1'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M2'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0-M2'
+    testCompile 'org.assertj:assertj-core:3.5.2'
+
+    testCompile 'com.h2database:h2:1.4.192'
+    testCompile 'org.hibernate:hibernate-entitymanager:5.0.2.Final'
+    testCompile 'org.hibernate:hibernate-core:5.0.2.Final'
+
+}
+
+
+// The persistence.xml is required at compile time.
+sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+compileJava.dependsOn(processResources)
+compileJava {
+    doFirst {
+        def aptDir = new File("$buildDir/apt/metamodel")
+        if (!aptDir.isDirectory()) aptDir.mkdirs()
+        options.compilerArgs = ['-s', aptDir]
+    }
+}
+
