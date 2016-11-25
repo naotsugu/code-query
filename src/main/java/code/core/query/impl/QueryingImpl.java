@@ -45,12 +45,12 @@ public class QueryingImpl<E> implements Querying<E> {
 
 
     @Override
-    public <R> Reading<E, R> map(Class<R> resultClass, Selector<E, R, ? extends Selection<R>> selector) {
+    public <R> Reading<E, R> select(Class<R> resultClass, Selector<E, R, ? extends Selection<R>> selector) {
         return ReadingImpl.of(resultClass, entityRoot(), selector);
     }
 
     @Override
-    public <R> Reading<E, R> map(Selector<E, R, ? extends Selection<R>> selector) {
+    public <R> Reading<E, R> select(Selector<E, R, ? extends Selection<R>> selector) {
         @SuppressWarnings("unchecked")
         Class<R> resultClass = (Class<R>) Object.class;
         return ReadingImpl.of(resultClass, entityRoot(), selector);

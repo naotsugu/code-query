@@ -1,5 +1,8 @@
 package code.core.query;
 
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.Objects;
 
 public class Subquerying<E1, E2> {
@@ -27,4 +30,11 @@ public class Subquerying<E1, E2> {
     }
 
 
+    public <R2> Subquery<R2> map(Class<R2> resultClass, Selector<E2, R2, ? extends Expression<R2>> selector) {
+        Subquery<R2> subquery = context.query().subquery(resultClass);
+        Root<E2> root = subquery.from(rootClass);
+        subquery.select(selector.apply(root, subquery, context.builder()));
+        subquery.where(specs.toPredicate(root, subquery, context.builder()));
+        return subquery;
+    }
 }

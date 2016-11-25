@@ -45,7 +45,7 @@ Long count = Querying.of(Customer.class).count().runWith(em);
 Selector<Customer, Integer, Path<Integer>> customerAge = c -> c.get(Customer_.age);
 
 Page<Integer> page = Querying.of(Customer.class)
-        .map(customerAge)
+        .select(customerAge)
         .groupBy(customerAge)
         .toPage(PageRequests.of())
         .runWith(em);
@@ -66,9 +66,24 @@ Page<Customer> page = Querying.of(Customer.class)
 
 ```java
 Page<Tuple> page = Querying.of(Customer.class)
-        .map(Tuple.class, c -> c.tuple(
+        .select(Tuple.class, c -> c.tuple(
                 c.get(Customer_.firstName).alias("firstName"),
                 c.get(Customer_.age).alias("age")))
+        .toPage(PageRequests.of())
+        .runWith(em);
+```
+
+
+##### Subquery 
+
+```java
+Page<Customer> page = Querying.of(Customer.class)
+        .filter(c -> {
+            Subquery<Integer> sq = c.subqueryOf(Customer.class)
+                    .filter(firstNameLeftMatchTo("firstName2"))
+                    .map(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
+            return c.equal(c.get(Customer_.age), sq);
+        })
         .toPage(PageRequests.of())
         .runWith(em);
 ```

@@ -8,7 +8,7 @@ public interface Selector<E, R, S> {
     S apply(CriteriaContext<E, R> criteria);
 
 
-    default S apply(Root<E> root, CriteriaQuery<R> query, CriteriaBuilder builder) {
+    default S apply(Root<E> root, AbstractQuery<R> query, CriteriaBuilder builder) {
         return apply(CriteriaContext.of(root, query, builder));
     }
 

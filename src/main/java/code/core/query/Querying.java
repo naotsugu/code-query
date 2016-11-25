@@ -13,9 +13,9 @@ public interface Querying<E> {
 
     Querying<E> filter(Specification<E> spec);
 
-    <R> Reading<E, R> map(Class<R> resultClass, Selector<E, R, ? extends Selection<R>> selector);
+    <R> Reading<E, R> select(Class<R> resultClass, Selector<E, R, ? extends Selection<R>> selector);
 
-    <R> Reading<E, R> map(Selector<E, R, ? extends Selection<R>> selector);
+    <R> Reading<E, R> select(Selector<E, R, ? extends Selection<R>> selector);
 
     Reading<E, Tuple> mapToTuple(Selector<E, Tuple, CompoundSelection<Tuple>> selector);
 

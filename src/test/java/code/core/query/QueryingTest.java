@@ -86,7 +86,7 @@ class QueryingTest {
     @Test void testSelecting() {
 
         Page<Integer> page = Querying.of(Customer.class)
-                .map(customerAge)
+                .select(customerAge)
                 .groupBy(customerAge)
                 .toPage(PageRequests.of(Sorts.desc("age")))
                 .runWith(em);
@@ -99,7 +99,7 @@ class QueryingTest {
 
         Page<Tuple> page = Querying.of(Customer.class)
                 .filter(lastNameEqualTo("lastName20"))
-                .map(Tuple.class, c -> c.tuple(
+                .select(Tuple.class, c -> c.tuple(
                         c.get(Customer_.firstName).alias("a1"),
                         c.get(Customer_.age).alias("a2")))
                 .toPage(PageRequests.of())
@@ -115,7 +115,7 @@ class QueryingTest {
 
         Page<Dto> page = Querying.of(Customer.class)
                 .filter(lastNameEqualTo("lastName10"))
-                .map(toDto)
+                .select(toDto)
                 .toPage(PageRequests.of())
                 .runWith(em);
 
@@ -142,6 +142,23 @@ class QueryingTest {
         assertThat(page.getContent().get(0).getAge()).isEqualTo(24);
 
     }
+
+    @Test void testSubquery2() {
+
+        Page<Customer> page = Querying.of(Customer.class)
+                .filter(c -> {
+                    Subquery<Integer> sq = c.subqueryOf(Customer.class)
+                            .filter(firstNameLeftMatchTo("firstName2"))
+                            .map(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
+                    return c.equal(c.get(Customer_.age), sq);
+                })
+                .toPage(PageRequests.of())
+                .runWith(em);
+
+        assertThat(page.getContent().get(0).getAge()).isEqualTo(24);
+
+    }
+
 
 
     static Specification<Customer> firstNameEqualTo(final String firstName) {
