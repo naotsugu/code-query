@@ -3,8 +3,10 @@ package code.core.domain.page;
 import java.util.Objects;
 
 /**
- * Implements of SortOrder.
+ * Basic implementation of {@link SortOrder}.
+ *
  * @param <T>
+ * @author naotsugu
  */
 public class BasicSortOrder<T> implements SortOrder<T> {
 

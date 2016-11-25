@@ -15,6 +15,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import java.util.stream.IntStream;
 
@@ -124,6 +126,22 @@ class QueryingTest {
     }
 
 
+    @Test void testSubquery() {
+
+        Page<Customer> page = Querying.of(Customer.class)
+                .filter(c -> {
+                    Subquery<Integer> sq = c.query().subquery(Integer.class);
+                    Root<Customer> subRoot = sq.from(Customer.class);
+                    sq.where(c.leftMatch(c.get(Customer_.firstName), "firstName2"));
+                    sq.select(c.builder().max(subRoot.get(Customer_.age)));
+                    return c.equal(c.get(Customer_.age), sq);
+                })
+                .toPage(PageRequests.of())
+                .runWith(em);
+
+        assertThat(page.getContent().get(0).getAge()).isEqualTo(24);
+
+    }
 
 
     static Specification<Customer> firstNameEqualTo(final String firstName) {
@@ -132,6 +150,10 @@ class QueryingTest {
 
     static Specification<Customer> lastNameEqualTo(final String lastName) {
         return c -> c.equal(c.get(Customer_.lastName), lastName);
+    }
+
+    static Specification<Customer> firstNameLeftMatchTo(final String firstName) {
+        return c -> c.leftMatch(c.get(Customer_.firstName), firstName);
     }
 
     static Selector<Customer, Integer, Path<Integer>> customerAge = c -> c.get(Customer_.age);

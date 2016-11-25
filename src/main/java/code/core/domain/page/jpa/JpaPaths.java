@@ -16,6 +16,8 @@ import java.util.stream.Collector;
 
 /**
  * JPA Utility.
+ *
+ * @author naotsugu
  */
 public class JpaPaths {
 

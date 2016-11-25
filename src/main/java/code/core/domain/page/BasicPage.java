@@ -5,6 +5,8 @@ import java.util.Objects;
 
 /**
  * Basic implementation of {@link Page}.
+ *
+ * @author naotsugu
  */
 public class BasicPage<E> implements Page<E> {
 

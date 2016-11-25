@@ -23,9 +23,8 @@ public interface CriteriaContext<E, R> extends EqualSupport, LikeSupport, Compou
         return root().get(attr);
     }
 
-    default <U> Subquery<U> subquery(Class<U> domainClass) {
-        Subquery<U> subquery = query().subquery(domainClass);
-        return subquery;
+    default <U> Subquerying<E, U> subquery(Class<U> domainClass) {
+        return Subquerying.of(this, domainClass);
     }
 
 }

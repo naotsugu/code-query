@@ -1,5 +1,8 @@
 package code.core.domain.page;
 
+/**
+ *
+ */
 public interface PageRequests {
 
     int DEFAULT_PAGE_SIZE = 100;

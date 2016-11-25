@@ -3,6 +3,12 @@ package code.core.domain.page;
 import java.util.Objects;
 import java.util.stream.Collector;
 
+/**
+ * Basic implementation of {@link PageRequest}.
+ *
+ * @param <T>
+ * @author naotsugu
+ */
 public class BasicPageRequest<T> implements PageRequest<T> {
 
     private final int number;

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Basic implementation of {@link Slice}.
+ *
+ * @param <E>
+ * @author naotsugu
+ */
 public class BasicSlice<E> implements Slice<E> {
 
     private final List<E> content;

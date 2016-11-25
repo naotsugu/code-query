@@ -2,6 +2,12 @@ package code.core.domain.page;
 
 import java.util.stream.Collector;
 
+/**
+ * Page qualifier.
+ *
+ * @param <T>
+ * @author naotsugu
+ */
 public interface PageQualifier<T> extends Pageable, Sortable<T> {
 
 

@@ -5,6 +5,7 @@ import java.util.stream.Collector;
 
 /**
  * Sortable.
+ *
  * @author naotsugu
  */
 public interface Sortable<T> extends Serializable {

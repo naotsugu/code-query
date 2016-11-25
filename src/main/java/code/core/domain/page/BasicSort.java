@@ -5,6 +5,12 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Basic implementation of {@link Sort}.
+ *
+ * @param <T>
+ * @author naotsugu
+ */
 public class BasicSort<T> implements Sort<T> {
 
     private List<SortOrder<T>> orders;

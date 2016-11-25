@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 /**
  * Sort option for listing objects.
+ *
  * @author naotsugu
  */
 public interface Sort<T> extends Serializable {
