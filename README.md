@@ -6,7 +6,7 @@ JPA querying library.
 
 ## Usage
 
-Create query and run it.
+Create a query and run it.
 
 ```java
 Page<Customer> page = Querying.of(Customer.class)
@@ -15,10 +15,8 @@ Page<Customer> page = Querying.of(Customer.class)
         .runWith(em);
 ```
 
-we get customer page result.
+We gets customer page result.
 
-
-Specification is
 
 ```java
 static Specification<Customer> firstNameEqualTo(final String firstName) {
@@ -88,7 +86,8 @@ Page<Customer> page = Querying.of(Customer.class)
         .runWith(em);
 ```
 
+##### Other 
 
-and more..
+See [QueryingTest.java](https://github.com/naotsugu/code-query/blob/master/src/test/java/code/core/query/QueryingTest.java) more example
 
 

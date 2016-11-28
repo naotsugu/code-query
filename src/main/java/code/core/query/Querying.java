@@ -10,8 +10,9 @@ import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Selection;
 
 /**
+ * Build {@link Query} helper.
  *
- * @param <E>
+ * @param <E> type of root entity
  * @author Naotsugu Kobayashi
  */
 public interface Querying<E> {
