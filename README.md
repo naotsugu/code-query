@@ -81,7 +81,7 @@ Page<Customer> page = Querying.of(Customer.class)
         .filter(c -> {
             Subquery<Integer> sq = c.subqueryOf(Customer.class)
                     .filter(firstNameLeftMatchTo("firstName2"))
-                    .map(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
+                    .select(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
             return c.equal(c.get(Customer_.age), sq);
         })
         .toPage(PageRequests.of())
