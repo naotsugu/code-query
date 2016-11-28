@@ -3,6 +3,7 @@ package code.core.query;
 import code.core.domain.page.Page;
 import code.core.domain.page.PageRequests;
 import code.core.domain.page.Sorts;
+import code.core.domain.page.jpa.PathTo;
 import code.core.query.model.Customer;
 import code.core.query.model.Customer_;
 import org.junit.jupiter.api.AfterAll;
@@ -25,16 +26,34 @@ import static org.assertj.core.api.Assertions.*;
 class QueryingTest {
 
     static EntityManagerFactory emf;
+
     static EntityManager em;
 
 
+    /**
+     * Create testing data.
+     * <p>
+     * <pre>
+     * Customer is
+     *   firstName0  lastName0  20
+     *   firstName1  lastName1  21
+     *   firstName2  lastName2  22
+     *   firstName3  lastName3  23
+     *   firstName4  lastName4  24
+     *   firstName5  lastName5  20
+     *    ...
+     *   firstName23 lastName23 23
+     *   firstName24 lastName24 24
+     * </pre>
+     */
     @BeforeAll static void initAll() {
         emf = Persistence.createEntityManagerFactory("testUnit");
         em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        IntStream.range(0, 25).forEach(i ->
-                em.persist(new Customer("firstName" + i, "lastName" + i, 20 + i % 5)));
+        IntStream.range(0, 25).forEach(i -> em.persist(
+                new Customer("firstName" + i, "lastName" + i, 20 + i % 5)));
+
         em.getTransaction().commit();
     }
 
@@ -44,6 +63,19 @@ class QueryingTest {
         emf.close();
     }
 
+
+    @Test void testGetPage() {
+
+        Page<Customer> page = Querying.of(Customer.class)
+                .toPage(PageRequests.of(10))
+                .runWith(em);
+
+        assertThat(page.getTotalElements()).isEqualTo(25L);
+        assertThat(page.getSize()).isEqualTo(10);
+        assertThat(page.getTotalPages()).isEqualTo(3);
+        assertThat(page.getContent().size()).isEqualTo(10);
+
+    }
 
 
     @Test void testFilterToGetPage() {
@@ -80,6 +112,31 @@ class QueryingTest {
 
         assertThat(count).isEqualTo(25L);
 
+    }
+
+
+    @Test void testSortingByPath() {
+
+        PathTo<Customer> age = root -> root.get(Customer_.age);
+        PathTo<Customer> firstName = root -> root.get(Customer_.firstName);
+
+        Page<Customer> page = Querying.of(Customer.class)
+                .toPage(PageRequests.of(Sorts.desc(age).asc(firstName)))
+                .runWith(em);
+
+        assertThat(page.getContent().get(0).getAge()).isEqualTo(24);
+        assertThat(page.getContent().get(0).getFirstName()).isEqualTo("firstName14");
+    }
+
+
+    @Test void testSortingByString() {
+
+        Page<Customer> page = Querying.of(Customer.class)
+                .toPage(PageRequests.of(Sorts.desc("age").asc("firstName")))
+                .runWith(em);
+
+        assertThat(page.getContent().get(0).getAge()).isEqualTo(24);
+        assertThat(page.getContent().get(0).getFirstName()).isEqualTo("firstName14");
     }
 
 
@@ -149,7 +206,7 @@ class QueryingTest {
                 .filter(c -> {
                     Subquery<Integer> sq = c.subqueryOf(Customer.class)
                             .filter(firstNameLeftMatchTo("firstName2"))
-                            .map(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
+                            .select(Integer.class, sc -> sc.max(sc.get(Customer_.age)));
                     return c.equal(c.get(Customer_.age), sq);
                 })
                 .toPage(PageRequests.of())

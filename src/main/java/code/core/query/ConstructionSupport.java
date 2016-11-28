@@ -1,16 +1,24 @@
 package code.core.query;
 
 import javax.persistence.Tuple;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CompoundSelection;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Selection;
 
 /**
  * Selection construction support.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface ConstructionSupport {
 
+    /**
+     * Gets a CriteriaBuilder.
+     *
+     * @return CriteriaBuilder
+     */
     CriteriaBuilder builder();
+
 
     /**
      * Create a selection item corresponding to a constructor.
@@ -22,6 +30,7 @@ public interface ConstructionSupport {
     default <R> CompoundSelection<R> construct(Class<R> resultClass, Selection<?>...selections) {
         return builder().construct(resultClass, selections);
     }
+
 
     /**
      * Create a tuple-valued selection item.

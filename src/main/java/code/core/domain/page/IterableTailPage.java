@@ -5,31 +5,61 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class IterableTailPage <E> implements Iterator<E>, Iterable<E> {
+/**
+ * Per page tailing iterator.
+ * <p>
+ * Page number treat as descending, and page contents treat as ascending.
+ *
+ * @param <E>  type of page elements
+ * @author Naotsugu Kobayashi
+ */
+public class IterableTailPage<E> implements Iterator<E>, Iterable<E> {
 
-
+    /** Base page request. */
     private final PageRequest pageRequest;
-    private final Function<PageRequest, Page<E>> findFunction;
-    private final Consumer<PageRequest> perPageConsumer;
 
+    /** Page contents find function. */
+    private final Function<PageRequest, Page<E>> findFunction;
+
+    /** Per page hook function. */
+    private final Consumer<PageRequest> perPageHook;
+
+    /** Current page count. */
     private int pageCount;
+
+    /** Current page count. */
     private boolean lastPage;
+
+    /** Per page iterator. */
     private Iterator<E> perPageIterator;
 
 
+    /**
+     * Create a new IterablePage.
+     *
+     * @param pageRequest  base page request
+     * @param findFunction  page contents find function
+     * @param perPageHook  per page hook function
+     */
     public IterableTailPage(PageRequest pageRequest,
                             Function<PageRequest, Page<E>> findFunction,
-                            Consumer<PageRequest> perPageConsumer) {
+                            Consumer<PageRequest> perPageHook) {
 
         this.findFunction = findFunction;
         this.pageRequest = pageRequest;
-        this.perPageConsumer = perPageConsumer;
+        this.perPageHook = perPageHook;
         this.pageCount = -1;
         this.lastPage = false;
 
     }
 
 
+    /**
+     * Create a new IterablePage.
+     *
+     * @param pageRequest  base page request
+     * @param findFunction  page contents find function
+     */
     public IterableTailPage(PageRequest pageRequest,
                             Function<PageRequest, Page<E>> findFunction) {
         this(pageRequest, findFunction, PageRequest -> {});
@@ -73,6 +103,10 @@ public class IterableTailPage <E> implements Iterator<E>, Iterable<E> {
         return this;
     }
 
+
+    /**
+     * Read next page and create iterator of page.
+     */
     private void nextPage() {
 
         if (pageCount == -1) {
@@ -82,7 +116,7 @@ public class IterableTailPage <E> implements Iterator<E>, Iterable<E> {
             if (preFetchPage.isLast()) {
                 lastPage = true;
                 pageCount = 0;
-                perPageConsumer.accept(pr);
+                perPageHook.accept(pr);
                 perPageIterator = preFetchPage.getContent().iterator();
                 return;
             } else {
@@ -92,7 +126,7 @@ public class IterableTailPage <E> implements Iterator<E>, Iterable<E> {
         }
 
         PageRequest pr = pageRequest.withNumber(--pageCount);
-        perPageConsumer.accept(pr);
+        perPageHook.accept(pr);
         Page<E> page = findFunction.apply(pr);
         lastPage = pageCount == 0;
         perPageIterator = page.getContent().iterator();

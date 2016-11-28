@@ -1,8 +1,6 @@
 package code.core.domain.page;
 
-import javax.persistence.criteria.Order;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
@@ -10,7 +8,7 @@ import java.util.stream.Stream;
 /**
  * Sort option for listing objects.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface Sort<T> extends Serializable {
 
@@ -24,7 +22,7 @@ public interface Sort<T> extends Serializable {
 
 
     /**
-     * Returns a new {@link Sort} noralized getSortBy sort property.
+     * Returns a new {@link Sort} normalized getSortBy sort property.
      *
      * @return a new {@link Sort}
      */
@@ -67,7 +65,13 @@ public interface Sort<T> extends Serializable {
     Sort<T> desc(T property);
 
 
-
+    /**
+     * Returns a sorting parameter that is converted by collector.
+     *
+     * @param collector  collector
+     * @param <R>  result type of sorting parameter
+     * @return  sorting parameter
+     */
     <R> R collect(Collector<SortOrder<T>, ?, R> collector);
 
 }

@@ -3,8 +3,8 @@ package code.core.domain.page;
 /**
  * Abstract interface for page.
  *
- * @param <E> page element
- * @author naotsugu
+ * @param <E> type of page element
+ * @author Naotsugu Kobayashi
  */
 public interface Page<E> extends Slice<E>, Pageable {
 

@@ -4,30 +4,59 @@ import code.core.query.CriteriaContext;
 
 import javax.persistence.criteria.AbstractQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Objects;
 
-public class CriteriaContextImpl<T, R> implements CriteriaContext<T, R> {
+/**
+ * Implementation of {@link CriteriaContext}.
+ *
+ * @param <E>  entity type of root
+ * @param <R>  result type of query
+ * @author Naotsugu Kobayashi
+ */
+public class CriteriaContextImpl<E, R> implements CriteriaContext<E, R> {
 
-    public final Root<T> root;
+    /** A root in the from clause. */
+    public final Root<E> root;
+
+    /** A top-level queries (or subqueries). */
     public final AbstractQuery<R> query;
+
+    /** CriteriaBuilder. */
     public final CriteriaBuilder builder;
 
 
-    private CriteriaContextImpl(Root<T> root, AbstractQuery<R> query, CriteriaBuilder builder) {
-        this.root = root;
-        this.query = query;
-        this.builder = builder;
+    /**
+     * Create a new {@link CriteriaContext} implementation.
+     *
+     * @param root  root in the from clause
+     * @param query  queries
+     * @param builder  criteria builder
+     */
+    private CriteriaContextImpl(Root<E> root, AbstractQuery<R> query, CriteriaBuilder builder) {
+        this.root = Objects.requireNonNull(root);
+        this.query = Objects.requireNonNull(query);
+        this.builder = Objects.requireNonNull(builder);
     }
 
 
-    public static <T, R> CriteriaContext<T, R> of(Root<T> root, AbstractQuery<R> query, CriteriaBuilder builder) {
+    /**
+     * Create a new {@link CriteriaContext} implementation.
+     *
+     * @param root  root in the from clause
+     * @param query  queries
+     * @param builder  criteria builder
+     * @param <E>  entity type of root
+     * @param <R>  result type of query
+     * @return CriteriaContext
+     */
+    public static <E, R> CriteriaContext<E, R> of(Root<E> root, AbstractQuery<R> query, CriteriaBuilder builder) {
         return new CriteriaContextImpl<>(root, query, builder);
     }
 
 
     @Override
-    public Root<T> root() {
+    public Root<E> root() {
         return root;
     }
 

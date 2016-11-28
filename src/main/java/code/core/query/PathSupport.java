@@ -7,15 +7,21 @@ import javax.persistence.metamodel.SingularAttribute;
 /**
  * Path selection support.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface PathSupport<E> {
 
+    /**
+     * Get a root.
+     *
+     * @return Root
+     */
     Root<E> root();
 
+
     /**
-     *  Create a path corresponding to the referenced
-     *  single-valued attribute.
+     *  Create a path corresponding to the referenced single-valued attribute.
+     *
      *  @param attribute single-valued attribute
      *  @return path corresponding to the referenced attribute
      */

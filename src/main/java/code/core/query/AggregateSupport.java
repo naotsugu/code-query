@@ -6,14 +6,21 @@ import javax.persistence.criteria.Expression;
 /**
  * Aggregate expression support.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface AggregateSupport {
 
+    /**
+     * Gets a CriteriaBuilder.
+     *
+     * @return CriteriaBuilder
+     */
     CriteriaBuilder builder();
+
 
     /**
      * Create an aggregate expression applying the avg operation.
+     *
      * @param x  expression representing input value to avg operation
      * @return avg expression
      */
@@ -21,8 +28,10 @@ public interface AggregateSupport {
         return builder().avg(x);
     }
 
+
     /**
      * Create an aggregate expression applying the sum operation.
+     *
      * @param x  expression representing input value to sum operation
      * @return sum expression
      */
@@ -30,9 +39,11 @@ public interface AggregateSupport {
         return builder().sum(x);
     }
 
+
     /**
      * Create an aggregate expression applying the sum operation to an
      * Integer-valued expression, returning a Long result.
+     *
      * @param x  expression representing input value to sum operation
      * @return sum expression
      */
@@ -40,9 +51,11 @@ public interface AggregateSupport {
         return builder().sumAsLong(x);
     }
 
+
     /**
      * Create an aggregate expression applying the sum operation to a
      * Float-valued expression, returning a Double result.
+     *
      * @param x  expression representing input value to sum operation
      * @return sum expression
      */
@@ -50,8 +63,10 @@ public interface AggregateSupport {
         return builder().sumAsDouble(x);
     }
 
+
     /**
      * Create an aggregate expression applying the numerical max operation.
+     *
      * @param x  expression representing input value to max operation
      * @return max expression
      */
@@ -59,8 +74,10 @@ public interface AggregateSupport {
         return builder().max(x);
     }
 
+
     /**
      * Create an aggregate expression applying the numerical min operation.
+     *
      * @param x  expression representing input value to min operation
      * @return min expression
      */
@@ -68,22 +85,24 @@ public interface AggregateSupport {
         return builder().min(x);
     }
 
+
     /**
      * Create an aggregate expression for finding the greatest of
      * the values (strings, dates, etc).
-     * @param x  expression representing input value to greatest
-     *           operation
+     *
+     * @param x  expression representing input value to greatest operation
      * @return greatest expression
      */
     default <X extends Comparable<? super X>> Expression<X> greatest(Expression<X> x) {
         return builder().greatest(x);
     }
 
+
     /**
      * Create an aggregate expression for finding the least of
      * the values (strings, dates, etc).
-     * @param x  expression representing input value to least
-     *           operation
+     *
+     * @param x  expression representing input value to least operation
      * @return least expression
      */
     default <X extends Comparable<? super X>> Expression<X> least(Expression<X> x) {

@@ -3,10 +3,7 @@ package code.core.domain.page.jpa;
 import code.core.domain.page.Direction;
 import code.core.domain.page.SortOrder;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -15,13 +12,20 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
- * JPA Utility.
+ * Utility for JPA.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public class JpaPaths {
 
 
+    /**
+     * Create new collector for JPA sort order.
+     * @param root  root
+     * @param cb  CriteriaBuilder
+     * @param <T>  type of sort property
+     * @return Collector
+     */
     public static <T> Collector<SortOrder<T>, ?, List<Order>> toOrder(final Root<?> root, final CriteriaBuilder cb) {
 
         BiConsumer<List<Order>, SortOrder<T>> accumulator = (list, o) ->
@@ -36,13 +40,26 @@ public class JpaPaths {
     }
 
 
-
-    private static Path<?> toPath(final Path<?> path, final Object prop) {
+    /**
+     * Convert to sort expression.
+     *
+     * @param path  base path
+     * @param prop  sort property
+     * @return expression
+     */
+    private static Expression<?> toPath(final Path<?> path, final Object prop) {
 
         if (prop == null) {
+
             return null;
 
+        } else if (prop instanceof PathTo) {
+
+            PathTo pathTo = (PathTo) prop;
+            return pathTo.apply(path);
+
         } else if (prop instanceof Path) {
+
             return (Path) prop;
 
         } else if (prop instanceof String) {

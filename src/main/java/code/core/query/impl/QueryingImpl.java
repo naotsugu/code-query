@@ -11,28 +11,50 @@ import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.Objects;
 
+/**
+ * Implementation of {@link Querying}.
+ *
+ * @param <E>  entity type of root
+ * @author Naotsugu Kobayashi
+ */
 public class QueryingImpl<E> implements Querying<E> {
 
+    /** A root type in the from clause. */
     private final Class<E> rootClass;
+
+    /** Specifications for the from clause. */
     private final Specifications<E> specs;
 
 
+    /**
+     * Create a new {@link Querying} implementation.
+     *
+     * @param rootClass  a root type in the from clause
+     * @param specs  specifications for the from clause
+     */
     private QueryingImpl(Class<E> rootClass, Specifications<E> specs) {
         this.rootClass = Objects.requireNonNull(rootClass);
         this.specs = Objects.requireNonNull(specs);
     }
 
 
+    /**
+     * Create a new {@link Querying} implementation with empty specification.
+     *
+     * @param rootClass  a root type in the from clause
+     */
     private QueryingImpl(Class<E> rootClass) {
         this(rootClass, Specifications.empty());
     }
 
 
+    /**
+     * Create a new {@link Querying} implementation with empty specification.
+     *
+     * @param rootClass  a root type in the from clause
+     */
     public static <E> QueryingImpl<E> of(Class<E> rootClass) {
         return new QueryingImpl<>(rootClass);
     }
@@ -49,6 +71,7 @@ public class QueryingImpl<E> implements Querying<E> {
         return ReadingImpl.of(resultClass, entityRoot(), selector);
     }
 
+
     @Override
     public <R> Reading<E, R> select(Selector<E, R, ? extends Selection<R>> selector) {
         @SuppressWarnings("unchecked")
@@ -56,10 +79,12 @@ public class QueryingImpl<E> implements Querying<E> {
         return ReadingImpl.of(resultClass, entityRoot(), selector);
     }
 
+
     @Override
-    public Reading<E, Tuple> mapToTuple(Selector<E, Tuple, CompoundSelection<Tuple>> selector) {
+    public Reading<E, Tuple> selectTuple(Selector<E, Tuple, CompoundSelection<Tuple>> selector) {
         return ReadingImpl.of(Tuple.class, entityRoot(), selector);
     }
+
 
     @Override
     public Query<Slice<E>> toSlice(PageQualifier<?> pageQualifier) {
@@ -73,6 +98,7 @@ public class QueryingImpl<E> implements Querying<E> {
         return em -> ReadingImpl.of(rootClass, entityRoot(), Selector.root())
                 .toPage(pageQualifier).runWith(em);
     }
+
 
     @Override
     public Query<Long> count() {

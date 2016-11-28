@@ -1,7 +1,10 @@
 package code.core.query.impl;
 
 import code.core.domain.page.*;
-import code.core.query.*;
+import code.core.query.EntityRoot;
+import code.core.query.Query;
+import code.core.query.Reading;
+import code.core.query.Selector;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
@@ -10,14 +13,36 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@link Reading} implementation.
+ *
+ * @param <E> type of root entity
+ * @param <R> type of query result
+ * @author Naotsugu Kobayashi
+ */
 public class ReadingImpl<E, R> implements Reading<E, R> {
 
+    /** A type of the query result. */
     private final Class<R> resultClass;
+
+    /** A entity root. */
     private final EntityRoot<E> entityRoot;
+
+    /** A selector for the from clause. */
     private final Selector<E, R, ? extends Selection<R>> selector;
+
+    /** Selectors for the group by clause. */
     private final List<Selector<E, R, ? extends Expression<?>>> groups;
 
 
+    /**
+     * Create a new {@link Reading} implementation.
+     *
+     * @param resultClass  type of the query result
+     * @param entityRoot  entity root
+     * @param selector  selector for the from clause
+     * @param groups selectors for the group by clause
+     */
     private ReadingImpl(Class<R> resultClass,
                         EntityRoot<E> entityRoot,
                         Selector<E, R, ? extends Selection<R>> selector,
@@ -27,14 +52,26 @@ public class ReadingImpl<E, R> implements Reading<E, R> {
         this.entityRoot = entityRoot;
         this.selector = selector;
         this.groups = groups;
+
     }
 
 
+    /**
+     * Create a new {@link Reading} implementation.
+     *
+     * @param resultClass  type of the query result
+     * @param entityRoot  entity root
+     * @param selector  selector for the from clause
+     * @param <E> type of root entity
+     * @param <R> type of query result
+     * @return {@link Reading} implementation instance
+     */
     public static <E, R> Reading<E, R> of(Class<R> resultClass,
                                           EntityRoot<E> entityRoot,
                                           Selector<E, R, ? extends Selection<R>> selector) {
         return new ReadingImpl<>(resultClass, entityRoot, selector, Collections.emptyList());
     }
+
 
     @Override
     public Reading<E, R> groupBy(Selector<E, R, ? extends Expression<?>> group) {
@@ -43,10 +80,12 @@ public class ReadingImpl<E, R> implements Reading<E, R> {
         return new ReadingImpl<>(resultClass, entityRoot, selector, newGroups);
     }
 
+
     @Override
     public Reading<E, R> groupBy(List<Selector<E, R, ? extends Expression<?>>> groups) {
         return new ReadingImpl<>(resultClass, entityRoot, selector, groups);
     }
+
 
     @Override
     public Query<Slice<R>> toSlice(PageQualifier<?> qualifier) {
@@ -66,6 +105,7 @@ public class ReadingImpl<E, R> implements Reading<E, R> {
             return new BasicSlice<>(typedQuery.getResultList(), qualifier);
         };
     }
+
 
     @Override
     public Query<Page<R>> toPage(PageQualifier<?> pageQualifier) {

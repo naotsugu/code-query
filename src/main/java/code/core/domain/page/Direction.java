@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Sort directions.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public enum Direction {
 
@@ -20,6 +20,7 @@ public enum Direction {
 
     /**
      * Returns whether this direction is ascending.
+     *
      * @return {@code true} if this is ascending, otherwise {@code false}
      */
     public boolean isAscending() {
@@ -29,6 +30,7 @@ public enum Direction {
 
     /**
      * Returns whether this direction is Descending.
+     *
      * @return {@code true} if this is descending, otherwise {@code false}
      */
     public boolean isDescending() {

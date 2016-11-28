@@ -5,22 +5,35 @@ import java.util.stream.Collector;
 /**
  * Page qualifier.
  *
- * @param <T>
- * @author naotsugu
+ * @param <T>  type of sort property
+ * @author Naotsugu Kobayashi
  */
 public interface PageQualifier<T> extends Pageable, Sortable<T> {
 
-
+    /**
+     * Returns {@code true} if {@code PageQualifier} is {@link #EMPTY} instance.
+     *
+     * @return Returns {@code true} if {@code PageQualifier} is empty, otherwise {@code false}
+     */
     default boolean isEmpty() {
         return this == EMPTY;
     }
 
 
+    /**
+     * Returns {@link #EMPTY} instance of {@code PageQualifier}.
+     *
+     * @param <T>  type of sort property
+     * @return {@link #EMPTY} instance
+     */
     static <T> PageQualifier<T> empty() {
         return EMPTY;
     }
 
 
+    /**
+     * A Empty instance of {@code PageQualifier}.
+     */
     PageQualifier EMPTY = new PageQualifier() {
 
         @Override

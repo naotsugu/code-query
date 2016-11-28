@@ -7,7 +7,7 @@ import javax.persistence.criteria.Predicate;
 /**
  * Equality predicate support.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface EqualSupport {
 
@@ -15,6 +15,7 @@ public interface EqualSupport {
 
     /**
      * Create a predicate for testing the arguments for equality.
+     *
      * @param expression1 expression
      * @param expression2 expression
      * @return equality predicate
@@ -23,8 +24,10 @@ public interface EqualSupport {
         return builder().equal(expression1, expression2);
     }
 
+
     /**
      * Create a predicate for testing the arguments for equality.
+     *
      * @param expression  expression
      * @param object  object
      * @return equality predicate
@@ -33,8 +36,10 @@ public interface EqualSupport {
         return builder().equal(expression, object);
     }
 
+
     /**
      * Create a predicate for testing the arguments for inequality.
+     *
      * @param expression1 expression
      * @param expression2 expression
      * @return inequality predicate
@@ -43,8 +48,10 @@ public interface EqualSupport {
         return builder().notEqual(expression1, expression2);
     }
 
+
     /**
      * Create a predicate for testing the arguments for inequality.
+     *
      * @param expression expression
      * @param object object
      * @return inequality predicate
@@ -53,8 +60,10 @@ public interface EqualSupport {
         return builder().notEqual(expression, object);
     }
 
+
     /**
      * Create a predicate testing for a true value.
+     *
      * @param expression expression to be tested
      * @return predicate
      */
@@ -62,8 +71,10 @@ public interface EqualSupport {
         return builder().isTrue(expression);
     }
 
+
     /**
      * Create a predicate testing for a false value.
+     *
      * @param expression expression to be tested
      * @return predicate
      */
@@ -71,8 +82,10 @@ public interface EqualSupport {
         return builder().isTrue(expression);
     }
 
+
     /**
      * Create a predicate to test whether the expression is null.
+     *
      * @param expression expression
      * @return is-null predicate
      */
@@ -80,8 +93,10 @@ public interface EqualSupport {
         return builder().isNull(expression);
     }
 
+
     /**
      * Create a predicate to test whether the expression is not null.
+     *
      * @param expression expression
      * @return is-not-null predicate
      */

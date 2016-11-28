@@ -5,23 +5,46 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Per page iterator.
+ *
+ * @param <E> type of page elements
+ * @author Naotsugu Kobayashi
+ */
 public class IterablePage<E> implements Iterator<E>, Iterable<E> {
 
+    /** Base page request. */
     private final PageRequest pageRequest;
+
+    /** Slice contents find function. */
     private final Function<PageRequest, Slice<E>> findFunction;
+
+    /** Per page hook function. */
     private final Consumer<PageRequest> perPageHook;
 
+    /** Current page count. */
     protected int pageCount;
+
+    /** Current page count. */
     protected boolean lastPage;
+
+    /** Per page iterator. */
     protected Iterator<E> perPageIterator;
 
 
+    /**
+     * Create a new IterablePage.
+     *
+     * @param pageRequest  base page request
+     * @param findFunction  page contents find function
+     * @param perPageHook  per page hook function
+     */
     public IterablePage(PageRequest pageRequest,
                         Function<PageRequest, Slice<E>> findFunction,
                         Consumer<PageRequest> perPageHook) {
 
-        this.findFunction = findFunction;
         this.pageRequest = pageRequest;
+        this.findFunction = findFunction;
         this.perPageHook = perPageHook;
         this.pageCount = -1;
         this.lastPage = false;
@@ -29,6 +52,12 @@ public class IterablePage<E> implements Iterator<E>, Iterable<E> {
     }
 
 
+    /**
+     * Create a new IterablePage.
+     *
+     * @param pageRequest  base page request
+     * @param findFunction  page contents find function
+     */
     public IterablePage(PageRequest pageRequest,
                         Function<PageRequest, Slice<E>> findFunction) {
         this(pageRequest, findFunction, PageRequest -> {});
@@ -73,6 +102,9 @@ public class IterablePage<E> implements Iterator<E>, Iterable<E> {
     }
 
 
+    /**
+     * Read next page and create iterator of page.
+     */
     protected void nextPage() {
         pageCount++;
         PageRequest pr = pageRequest.withNumber(pageCount);
@@ -81,5 +113,6 @@ public class IterablePage<E> implements Iterator<E>, Iterable<E> {
         lastPage = !slice.hasNext();
         perPageIterator = slice.getContent().iterator();
     }
+
 
 }

@@ -6,15 +6,24 @@ import java.util.Objects;
 /**
  * Basic implementation of {@link Page}.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public class BasicPage<E> implements Page<E> {
 
+    /** A slice of data. */
     private final Slice<E> slice;
 
+    /** Total count of elements. */
     private final long totalElements;
 
 
+    /**
+     * Create new page implementation instance.
+     *
+     * @param content  contents of this page
+     * @param pageable  pageable
+     * @param totalElements  total count of elements
+     */
     public BasicPage(List<E> content, Pageable pageable, long totalElements) {
 
         Objects.requireNonNull(pageable);

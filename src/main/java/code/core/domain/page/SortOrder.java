@@ -5,8 +5,8 @@ import java.io.Serializable;
 /**
  * Sort property implements the pairing of an {@link Direction} and a property.
  *
- * @param <T> Type of property
- * @author naotsugu
+ * @param <T> type of property
+ * @author Naotsugu Kobayashi
  */
 public interface SortOrder<T> extends Serializable {
 
@@ -16,6 +16,7 @@ public interface SortOrder<T> extends Serializable {
 
     /**
      * Sort property.
+     *
      * @return sort property
      */
     T getProperty();
@@ -23,6 +24,7 @@ public interface SortOrder<T> extends Serializable {
 
     /**
      * Sort direction.
+     *
      * @return sort direction
      */
     Direction getDirection();

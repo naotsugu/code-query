@@ -8,17 +8,27 @@ import java.util.Objects;
  * Basic implementation of {@link Slice}.
  *
  * @param <E>
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public class BasicSlice<E> implements Slice<E> {
 
+    /** Content data of slice. */
     private final List<E> content;
 
+    /** Information for this slice. */
     private final Pageable pageable;
 
+    /** Indicates that this slice has next. */
     private final boolean hasNext;
 
 
+    /**
+     * Create a new slice.
+     *
+     * @param content  content
+     * @param pageable  pageable
+     * @param hasNext  has next slice?
+     */
     public BasicSlice(List<E> content, Pageable pageable, boolean hasNext) {
 
         this.pageable = Objects.requireNonNull(pageable);
@@ -26,13 +36,20 @@ public class BasicSlice<E> implements Slice<E> {
 
         content = (content == null) ? new ArrayList<>() : content;
         if (content.size() > this.pageable.getSize()) {
-            throw new IllegalArgumentException("Content size must not be less than or equal runWith pageable size.");
+            throw new IllegalArgumentException("Content size must not be less than or equal to pageable size.");
         }
+
         this.content = content;
 
     }
 
 
+    /**
+     * Create a new slice.
+     *
+     * @param content  content
+     * @param pageable  pageable
+     */
     public BasicSlice(List<E> content, Pageable pageable) {
         this.pageable = Objects.requireNonNull(pageable);
         content = (content == null) ? new ArrayList<>() : content;

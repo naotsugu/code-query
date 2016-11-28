@@ -3,21 +3,41 @@ package code.core.query;
 import javax.persistence.criteria.Predicate;
 import java.util.function.BiFunction;
 
+/**
+ * Helper for combine {@link Specification} instances.
+ *
+ * @param <T>
+ * @author Naotsugu Kobayashi
+ */
 public class Specifications<T> implements Specification<T> {
 
+    /** specification */
     private final Specification<T> spec;
 
 
+    /**
+     * Creates a new {@link Specifications} wrapper for the given {@link Specification}.
+     *
+     * @param spec {@link Specification} to be wrapped
+     */
     protected Specifications(Specification<T> spec) {
         this.spec = (spec == null) ? Specification.empty() : spec;
     }
 
 
+    /**
+     * Creates a new {@link Specifications} wrapper for the given {@link Specification}.
+     *
+     * @param spec {@link Specification} to be wrapped
+     */
     public static <T> Specifications<T> of(Specification<T> spec) {
         return new Specifications(spec);
     }
 
 
+    /**
+     * Creates a empty {@link Specifications}.
+     */
     public static <T> Specifications<T> empty() {
         return new Specifications(null);
     }
@@ -29,6 +49,14 @@ public class Specifications<T> implements Specification<T> {
     }
 
 
+
+    /**
+     * AND operation.
+     * ANDs the given specification to the current one.
+     *
+     * @param arg  operand
+     * @return new {@link Specifications}
+     */
     public Specifications<T> and(final Specification<T> arg) {
 
         final Specification<T> other = (arg == null) ? Specification.empty() : arg;
@@ -43,6 +71,13 @@ public class Specifications<T> implements Specification<T> {
     }
 
 
+    /**
+     * OR operation.
+     * ORs the given specification to the current one.
+     *
+     * @param arg  operand
+     * @return new {@link Specifications}
+     */
     public Specifications<T> or(final Specification<T> arg) {
 
         final Specification<T> other = (arg == null) ? Specification.empty() : arg;
@@ -57,6 +92,12 @@ public class Specifications<T> implements Specification<T> {
     }
 
 
+    /**
+     * Negates the given {@link Specification}.
+     *
+     * @param spec  operand
+     * @return new {@link Specifications}
+     */
     public static <T> Specifications<T> not(final Specification<T> spec) {
 
         return new Specifications<T>(spec) {
@@ -70,6 +111,14 @@ public class Specifications<T> implements Specification<T> {
     }
 
 
+    /**
+     * Compose predicate by the given function.
+     *
+     * @param lhs  left-hand-side
+     * @param rhs  right-hand-side
+     * @param function  compose function
+     * @return {@link Predicate}
+     */
     private Predicate compose(Predicate lhs, Predicate rhs,
                               BiFunction<Predicate, Predicate, Predicate> function) {
 
@@ -79,4 +128,5 @@ public class Specifications<T> implements Specification<T> {
         else return function.apply(lhs, rhs);
 
     }
+
 }

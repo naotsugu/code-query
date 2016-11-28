@@ -5,22 +5,31 @@ import java.util.Objects;
 /**
  * Basic implementation of {@link SortOrder}.
  *
- * @param <T>
- * @author naotsugu
+ * @param <T> type of sort properties
+ * @author Naotsugu Kobayashi
  */
 public class BasicSortOrder<T> implements SortOrder<T> {
 
+    /** A property of sorting. */
     private final T property;
 
+    /** A direction of sorting. */
     private final Direction direction;
 
 
-    public BasicSortOrder(T property, Direction direction) {
+    /**
+     * Create new {@code BasicSortOrder}.
+     *
+     * @param property  a property of sorting
+     * @param direction  a direction of sorting
+     */
+    BasicSortOrder(T property, Direction direction) {
 
         this.property = Objects.requireNonNull(property);
         this.direction = Objects.requireNonNull(direction);
 
     }
+
 
     @Override
     public T getProperty() {

@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Pagination information.
  *
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public interface Pageable extends Serializable {
 

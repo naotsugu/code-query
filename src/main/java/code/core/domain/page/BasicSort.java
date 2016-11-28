@@ -9,13 +9,19 @@ import java.util.stream.Stream;
  * Basic implementation of {@link Sort}.
  *
  * @param <T>
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public class BasicSort<T> implements Sort<T> {
 
+    /** List of sort order. */
     private List<SortOrder<T>> orders;
 
 
+    /**
+     * Create a new {@link Sort} instance.
+     *
+     * @param orders  list of sort order
+     */
     public BasicSort(List<SortOrder<T>> orders) {
         this.orders = (orders == null) ? new ArrayList<>() : orders;
     }
@@ -25,7 +31,6 @@ public class BasicSort<T> implements Sort<T> {
     public Stream<SortOrder<T>> stream() {
         return orders.stream();
     }
-
 
 
     @Override
@@ -64,10 +69,12 @@ public class BasicSort<T> implements Sort<T> {
         return and(new BasicSort<>(Arrays.asList(new BasicSortOrder<>(property, Direction.DESC))));
     }
 
+
     @Override
     public <R> R collect(Collector<SortOrder<T>, ?, R> collector) {
         return orders.stream().collect(collector);
     }
+
 
     @Override
     public String toString() {

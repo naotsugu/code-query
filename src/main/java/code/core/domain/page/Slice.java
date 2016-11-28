@@ -4,10 +4,9 @@ import java.util.List;
 
 /**
  * A slice of data.
- * It contains content of objects.
  *
- * @param <E> Type of contents
- * @author naotsugu
+ * @param <E> type of contents
+ * @author Naotsugu Kobayashi
  */
 public interface Slice<E> extends Pageable {
 

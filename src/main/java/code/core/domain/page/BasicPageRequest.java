@@ -7,17 +7,27 @@ import java.util.stream.Collector;
  * Basic implementation of {@link PageRequest}.
  *
  * @param <T>
- * @author naotsugu
+ * @author Naotsugu Kobayashi
  */
 public class BasicPageRequest<T> implements PageRequest<T> {
 
+    /** Page number. */
     private final int number;
 
+    /** Page size. */
     private final int size;
 
+    /** Sort condition. */
     private final Sort<T> sort;
 
 
+    /**
+     * Create new {@link PageRequest} instance.
+     *
+     * @param number  page number
+     * @param size  page size
+     * @param sort  sort condition
+     */
     public BasicPageRequest(int number, int size, Sort<T> sort) {
 
         if (number < 0) {
@@ -25,7 +35,7 @@ public class BasicPageRequest<T> implements PageRequest<T> {
         }
 
         if (size <= 0) {
-            throw new IllegalArgumentException("Page size must not be less than or equal runWith zero!");
+            throw new IllegalArgumentException("Page size must not be less than or equal to zero!");
         }
 
         Objects.requireNonNull(sort);
